@@ -1,5 +1,7 @@
 # menu
-
+## routes
+- / - для пользователя
+- /admin - для админа 
 ## Project setup
 ```
 npm install
