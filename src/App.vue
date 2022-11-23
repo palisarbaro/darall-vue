@@ -1,28 +1,25 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <MenuPage msg="Welcome to Your Vue.js App"/>
+    <NavBar/>
+    <div style="margin-top: 60px">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import MenuPage from './components/MenuPage.vue'
-
+import NavBar from './components/NavBar.vue';
 export default {
   name: 'App',
   components: {
-    MenuPage
+    NavBar
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+@import "~@/assets/scss/vendors/bootstrap-vue/index";
+html {
+    scroll-behavior: smooth;
 }
 </style>

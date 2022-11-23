@@ -1,58 +1,57 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div>
+    <div v-for="section in sections" :key="section.id">
+      <h1 :id="section.id" style="scroll-margin: 60px;" class="text-center">{{section.name}}</h1>
+    <b-container>
+      <b-row>
+
+      <MenuPosition
+        v-for="dish in section.dishes" :key="dish.id"
+        :name="dish.name" :description="dish.description" :img-src="dish.img" :is-admin="isAdmin"
+        style="max-width: 600px;" class="col-12 col-md-6 col-lg-4" />
+
+      </b-row>
+    </b-container>
+    </div>
   </div>
 </template>
 
 <script>
+import MenuPosition from "./MenuPosition.vue"
+let dish = {id: 1, name: "Плов ", 
+  description: "Плов — блюдо восточной кухни, основу которого составляет варёный рис[4] (в исключительных случаях — другая крупа или мелкие макаронные изделия[5]). Отличительным свойством плова является его рассыпчатость[1], достигаемая соблюдением технологии приготовления риса и добавлением в плов животного или растительного жира, препятствующего слипанию крупинок. ",
+  img: "https://mtdata.ru/u1/photo2188/20680531531-0/original.jpg",
+}
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+  name: 'MenuPage',
+  components: {MenuPosition},
+  props:{
+    isAdmin:{
+      type: Boolean,
+      default: false
+    }
+  },
+  data(){
+    return {
+      sections:[
+        {id:'snaks', name: 'Закуски', dishes: [dish,dish,dish,dish,dish,dish,]},
+        {id:'hot', name: 'Горячие блюда', dishes: [dish,dish,dish,dish,dish,dish,]},
+      ]
+    }
+  },
+  async mounted(){
+    // const sections = await getSections()
+    // for(const section of sections){
+    //   if(!(section.id in this.sectionIds)){
+    //     this.sections.push(section)
+    //   }
+    // }
+  },
+
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
