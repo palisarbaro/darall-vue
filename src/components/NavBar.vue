@@ -15,31 +15,15 @@
 </template>
   
 <script>
-import { getSections } from "@/api"
+import {mapGetters} from 'vuex'
 export default {
     name: 'NavBar',
-    data(){
-        return {
-            sections:[
-                {htmlId:'snaks', name: 'Закуски'},
-                {htmlId:'hot', name: 'Горячие блюда'},
-            ]
-        }
-    },
-
     computed:{
-        sectionIds(){
-            return this.sections.map(x=>x.htmlId)
-        }
+       ...mapGetters(['sections'])
     },
 
     async mounted(){
-        const sections = await getSections()
-        for(const section of sections){
-            if(!this.sectionIds.includes(section.htmlId)){
-                this.sections.push(section)
-            }
-        }   
+      
     },
 }
 </script>

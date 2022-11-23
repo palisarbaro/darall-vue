@@ -1,30 +1,42 @@
 <template>
   <div>
-    <div v-for="section in sections" :key="section.id">
+    <SaveForm  @saved="updateDishes()" ref="saveForm" />
+    <div v-for="section in processedSections" :key="section.id" class="mt-5">
       <h1 :id="section.id" style="scroll-margin: 60px;" class="text-center">{{section.name}}</h1>
-    <b-container>
-      <b-row>
+      <h2 class="text-center text-muted" v-if="section.dishes.length===0 && !isAdmin"> В этой категории пока нет блюд</h2>
 
-      <MenuPosition
-        v-for="dish in section.dishes" :key="dish.id"
-        :name="dish.name" :description="dish.description" :img-src="dish.img" :is-admin="isAdmin"
-        style="max-width: 600px;" class="col-12 col-md-6 col-lg-4" />
+      <b-container>
+        <b-row>
+        <MenuPosition
+          v-for="dish in section.dishes" :key="dish.id"
+          :name="dish.name" :description="dish.description" :img-src="dish.img" :price="dish.price"
+          style="max-width: 600px;" class="col-12 col-md-6 col-lg-4" 
+        >
+          <b-button class="w-100 mt-auto" v-b-modal.my-modal v-if="isAdmin" @click="$refs.saveForm.dish={...dish}">{{dish.fake?'Добавить':'Редактировать'}}</b-button>
+        </MenuPosition>
 
-      </b-row>
-    </b-container>
+        </b-row>
+      </b-container>
     </div>
   </div>
 </template>
 
 <script>
 import MenuPosition from "./MenuPosition.vue"
-let dish = {id: 1, name: "Плов ", 
-  description: "Плов — блюдо восточной кухни, основу которого составляет варёный рис[4] (в исключительных случаях — другая крупа или мелкие макаронные изделия[5]). Отличительным свойством плова является его рассыпчатость[1], достигаемая соблюдением технологии приготовления риса и добавлением в плов животного или растительного жира, препятствующего слипанию крупинок. ",
-  img: "https://mtdata.ru/u1/photo2188/20680531531-0/original.jpg",
+import SaveForm from "./SaveForm.vue"
+import {mapActions} from 'vuex'
+
+let empty_dish = {
+  id: -1,
+  name: "Новое блюдо",
+  price: 11000,
+  description: "Описание",
+  img: "no-image.png",
+  fake: true
 }
 export default {
   name: 'MenuPage',
-  components: {MenuPosition},
+  components: {MenuPosition, SaveForm},
   props:{
     isAdmin:{
       type: Boolean,
@@ -33,19 +45,31 @@ export default {
   },
   data(){
     return {
+      currentDish: JSON.parse(JSON.stringify(empty_dish)),
       sections:[
-        {id:'snaks', name: 'Закуски', dishes: [dish,dish,dish,dish,dish,dish,]},
-        {id:'hot', name: 'Горячие блюда', dishes: [dish,dish,dish,dish,dish,dish,]},
       ]
     }
   },
+  methods:{
+    ...mapActions(['loadDishes']),
+    async updateDishes(){
+      let dishesBySections = await this.loadDishes()
+      this.sections = dishesBySections
+    }
+  },
+  computed:{
+    processedSections(){
+      
+      const processed = []
+      for(const section of this.sections){
+        const empty_dish_with_section = {section: section.id, ...empty_dish}
+        processed.push({id:section.id, name:section.name, dishes:[...section.dishes,empty_dish_with_section]})
+      }
+      return processed
+    }
+  },
   async mounted(){
-    // const sections = await getSections()
-    // for(const section of sections){
-    //   if(!(section.id in this.sectionIds)){
-    //     this.sections.push(section)
-    //   }
-    // }
+    await this.updateDishes()
   },
 
 }

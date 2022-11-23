@@ -10,6 +10,7 @@ import AdminPage from './components/AdminPage.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import store from './store'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -26,5 +27,6 @@ const router = new VueRouter({
 
 new Vue({
   render: h => h(App),
+  store,
   router
 }).$mount('#app')

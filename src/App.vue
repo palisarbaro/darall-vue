@@ -9,8 +9,16 @@
 
 <script>
 import NavBar from './components/NavBar.vue';
+import {mapActions} from 'vuex'
+
 export default {
   name: 'App',
+  methods: {
+    ...mapActions(['loadSections'])
+  },
+  async mounted(){
+    await this.loadSections()    
+  },
   components: {
     NavBar
   }
