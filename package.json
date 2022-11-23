@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && mkdir -p dist/admin && cp dist/index.html dist/admin/index.html && rm -rf $(find ../backend/public/* -not -path  */img*)  && mv -f dist/* ../backend/public",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

@@ -10,7 +10,7 @@
         <MenuPosition
           v-for="dish in section.dishes" :key="dish.id"
           :name="dish.name" :description="dish.description" :img-src="dish.img" :price="dish.price"
-          style="max-width: 600px;" class="col-12 col-md-6 col-lg-4" 
+          style="max-width: 600px;" class="col-12 col-md-6 col-lg-4 text-break" 
         >
           <b-button class="w-100 mt-auto" v-b-modal.my-modal v-if="isAdmin" @click="$refs.saveForm.dish={...dish}">{{dish.fake?'Добавить':'Редактировать'}}</b-button>
         </MenuPosition>
@@ -62,8 +62,8 @@ export default {
       
       const processed = []
       for(const section of this.sections){
-        const empty_dish_with_section = {section: section.id, ...empty_dish}
-        processed.push({id:section.id, name:section.name, dishes:[...section.dishes,empty_dish_with_section]})
+        const empty_dish_with_section = this.isAdmin? [{section: section.id, ...empty_dish}]:[]
+        processed.push({id:section.id, name:section.name, dishes:[...section.dishes, ...empty_dish_with_section]})
       }
       return processed
     }
